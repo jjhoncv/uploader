@@ -1,0 +1,47 @@
+doctype
+html(lang=es)
+	head
+		meta(charset="utf-8")
+		title Skeletor
+		meta(name="description",content="Skeletor")
+		meta(name="viewport",content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
+		link(rel="stylesheet",href="bower_components/normalize-css/normalize.css")
+		link(rel="stylesheet",href="bower_components/bootstrap/dist/css/bootstrap.min.css")
+		link(rel="stylesheet",href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css")
+		link(rel="stylesheet",href="css/style.css")
+		script.
+			var yOSON = {
+				module : "default",
+				controller : "index",
+				action : "index"
+			}
+	body
+		.container
+			h1 Skeletor
+			form#register
+				.form-group
+					label(for='message') Imagenes
+					input#images.form-control(name='images[]', type='file', placeholder='Ingrese su nombre', multiple, accept="image/*")
+				.preview-files
+
+				input.btn.btn-default(type='submit', value='Enviar')
+
+		script(type="text/template" id="preview-files")
+			|	{{
+			|		_.each(data.images, function(item){
+			|	}}
+			.item
+				figure
+					img(src!="{{= item}}")
+			|	{{ 
+			|		});
+			|	}}
+
+		script(src="bower_components/jquery/dist/jquery.min.js")
+		script(src="bower_components/yosonjs/build/yoson-min.js")
+
+		script(src="bower_components/html5shiv/dist/html5shiv.min.js")
+		script(src="bower_components/jquery-validation/dist/jquery.validate.min.js")
+		script(src="js/modules.js")
+		script(src="js/schema.js")
+		script(src="js/loader.js")
