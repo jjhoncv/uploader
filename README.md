@@ -1,12 +1,11 @@
-skeletor
+Uploader
 ========
 
 ## ¿Que es?
 
-Es una estructura base para comenzar un proyecto basado en jade, stylus, coffee script.
-Se usa gulp para la gestión de tareas.
+Sirve para subir archivos en forma asincrona con soporte para todos los browsers
 
-## ¿Como se usa?
+## Forma de instalarlo
 
 Entrar a la raiz del proyecto y hacer
 - sudo npm install
@@ -55,3 +54,4 @@ Las dependencias que se estan instalando son
  - html5shiv
  - normalize
  - jquery-validate
+
