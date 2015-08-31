@@ -22,18 +22,20 @@ html(lang=es)
 				.form-group
 					label(for='message') Imagenes
 					input#images.form-control(name='images[]', type='file', placeholder='Ingrese su nombre', multiple, accept="image/*")
-				.preview-files
+				div#preview_files
 
 				input.btn.btn-default(type='submit', value='Enviar')
 
-		script(type="text/template" id="preview-files")
+		script(type="text/template" id="tplItemSlider")
 			|	{{
 			|		_.each(data.images, function(item){
 			|	}}
-			.item
 				figure
-					img(src!="{{= item}}")
-			|	{{ 
+					.helper_center
+					a(href!="{{= url}}")
+						img(src!="{{= data.baseImage}}/{{= item}}")
+				span {{= item.title}}
+			|	{{
 			|		});
 			|	}}
 

@@ -13,7 +13,7 @@ schema = {
               yOSON.AppCore.runModule('underscore');
               yOSON.AppCore.runModule('preview_images', {
                 form: "form",
-                preview: ".preview-files",
+                preview: "#preview_files",
                 input: "input[type=file]"
               });
             },

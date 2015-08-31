@@ -25,16 +25,19 @@
           <label for="message">Imagenes</label>
           <input id="images" name="images[]" type="file" placeholder="Ingrese su nombre" multiple accept="image/*" class="form-control">
         </div>
-        <div class="preview-files"></div>
+        <div id="preview_files"></div>
         <input type="submit" value="Enviar" class="btn btn-default">
       </form>
     </div>
-    <script type="text/template" id="preview-files">
+    <script type="text/template" id="tplItemSlider">
+      	{{ console.log('aa'); }}
       	{{
       		_.each(data.images, function(item){
       	}}
       <div class="item">
-        <figure><img src="{{= item}}"></figure>
+        <figure>
+          <div class="helper_center"></div><a href="{{= url}}"><img src="{{= data.baseImage}}/{{= item}}"></a>
+        </figure><span>{{= item.title}}</span>
       </div>	{{ 
       		});
       	}}
