@@ -31,7 +31,55 @@ yOSON.AppCore.addModule "underscore", (Sb) ->
 	return {
 		init: initialize
 	}
-, ["../bower_components/underscore/underscore.js"]
+, ["js/libs/underscore/underscore.js"]
+
+
+
+###
+Module description
+@class files
+@main /home/jhonnatan/htdocs/uploader/app/precom/coffee
+@author 
+###
+
+yOSON.AppCore.addModule "files", (Sb) ->
+	
+	files = []
+
+	fn = {
+		add : (file)->
+			files.push(file)
+			return
+
+		getAll : (callbackDeal)->
+			callbackDeal.call(this, files)
+			return
+
+		del : (key)->
+			total = files.length
+			files.splice(key, total)
+			###i = 0
+			while i < total
+				file = files[i]
+				if file.key == key
+					slice(i, total)
+					return
+				i++###
+			console.log("key", key)
+			console.log("total", total)
+			console.log("files", files)
+
+			return
+	}
+	initialize = ->
+		Sb.events(['files:add'], fn.add, this)
+		Sb.events(['files:getAll'], fn.getAll, this)
+		Sb.events(['files:del'], fn.del, this)
+		return
+
+	return {
+		init: initialize
+	}
 
 
 ###
@@ -43,18 +91,24 @@ Validacion de FileReader
 yOSON.AppCore.addModule "file_reader", (Sb) ->
 	
 	fn =
-		setFile : (result, callback)->
-			if (window.File && window.FileReader && window.FileList && window.Blob)
+		setFile : (file, image, callback)->
+
+			if (window.FileReader)
 				reader = new FileReader()
 				reader.onload = (e)->
-					fn.loadReader(e, callback)
+					fn.loadReader(e, file, image, callback)
 					return
-				reader.readAsDataURL()
+				reader.readAsDataURL(file)
+			else
+				image["title"] = file.name
+				image["src"] = ""
+				callback(image)
 			return
 
-		loadReader : (e, callback) ->			
-			result.data.images["src"] = e.target.result
-			callback(result)
+		loadReader : (e, file, image, callback) ->
+			image["src"] = e.target.result
+			image["title"] = file.name
+			callback(file, image)
 			return
 		
 	initialize = (oP) ->		
@@ -77,54 +131,113 @@ Modulo que implementa la vista preliminar de las imagenes
 yOSON.AppCore.addModule "preview_images", (Sb) ->
 	defaults = {
 		form 		: ""
+		item 		: ""
 		preview 	: ""
 		input		: ""
+		tpl 		: ""
+		btnCancel 	: ""
 	}
 	
 	st = {}
 	dom = {}
 
-	result = data: images: []
+	image = {}
 
 	catchDom = (st) ->
 		dom.form 	= $(st.form)
 		dom.input 	= $(st.input, dom.form)
-		dom.preview = $(st.preview, dom.form)     
-		return
+		dom.preview = $(st.preview, dom.form)
+		return	
 
 	suscribeEvents = () ->
-		dom.input.on "change",   events.selectedFiles
+		dom.input.on "change", events.selectedFiles
+		dom.btnCancel.on "click", events.cancelFile
 		return
 
-	events = {		
+	events = {
 		selectedFiles : (e)->
-			fn.prepare_data(e.target.files)			
-			return		
-	}
-	fn = {
-		prepare_data : (files)->			
-			i = 0
-			while i <  files.length
-				file = files[i]
-				
-				result.data.images['title'] = escape(files.name)				
-				Sb.trigger("file_reader:setFile", file, fn.setFileImage)
-				i++
-			
-			Sb.trigger("underscore:template", st.preview, result, fn.getMergeData)			
+			fn.prepare_data(e.target.files)
 			return
 
-		setFileImage : (resultFileReader)->
-			result = resultFileReader
+		cancelFile : (e)->
+			console.log("cancelFile")
+			ele = $(e.target).parents(st.item)
+			key = ele.index()
+			ele.remove()
+			Sb.trigger("files:del", key)
+			e.preventDefault()
+			return	
+	}
+	fn = {
+		prepare_data : (files)->
+			index = 0
+			while index <  files.length
+				file = files[index]
+				Sb.trigger("file_reader:setFile", file, image, fn.setFileImage)
+				index++
+			return
+
+		setFileImage : (file, image)->
+			Sb.trigger("underscore:template", st.tpl, image, fn.getMergeData)			
+			Sb.trigger("files:add", file)
 			return
 
 		getMergeData : (html)->
-			dom.preview.html(html)
+			dom.preview.append(html)
+			item = dom.preview.find(st.item)
+			
+			$("<span></span>", 
+				class : "cancel"
+				click : events.cancelFile
+			).appendTo(item)
+			
 			return
 	}
 	initialize = (opts) ->
 		st = $.extend({}, defaults, opts)
 		catchDom(st)
+		suscribeEvents()
+		return
+
+	return {
+		init: initialize
+	}
+
+###
+Modulo que realiza el submit 
+@class modules
+@main /home/jhonnatan/htdocs/skeletor/app/precom/coffee
+@author 
+###	
+
+yOSON.AppCore.addModule "submit_images", (Sb) ->
+	defaults = {
+		parent 	: "form"
+		el 		: ".submit"
+	}
+	st = {}
+	dom = {}
+
+	catchDom = () ->
+		dom.parent 	= $(st.parent)
+		dom.el 		= $(st.el, dom.parent)
+		return
+	suscribeEvents = () ->
+		dom.el.on "submit", events.submit
+		return
+
+	events = {
+		submit : (e) ->
+			return
+	}
+	fn = {
+		functionName : () ->
+			console.log("example")
+			return
+	}
+	initialize = (opts) ->
+		st = $.extend({}, defaults, opts)
+		catchDom()
 		suscribeEvents()
 		return
 

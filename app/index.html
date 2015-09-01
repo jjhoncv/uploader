@@ -5,9 +5,9 @@
     <title>Skeletor</title>
     <meta name="description" content="Skeletor">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="js/libs/normalize-css/normalize.css">
+    <link rel="stylesheet" href="js/libs/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="js/libs/bootstrap/dist/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/style.css">
     <script>
       var yOSON = {
@@ -26,26 +26,28 @@
           <input id="images" name="images[]" type="file" placeholder="Ingrese su nombre" multiple accept="image/*" class="form-control">
         </div>
         <div id="preview_files"></div>
-        <input type="submit" value="Enviar" class="btn btn-default">
+        <input type="submit" value="Enviar" class="btn btn-default submit">
       </form>
     </div>
-    <script type="text/template" id="tplItemSlider">
-      	{{ console.log('aa'); }}
-      	{{
-      		_.each(data.images, function(item){
-      	}}
+    <script type="text/template" id="previewFiles">
       <div class="item">
+        				
+        	{{
+        		if(src){
+        	}}<span>{{= title}}</span>
         <figure>
-          <div class="helper_center"></div><a href="{{= url}}"><img src="{{= data.baseImage}}/{{= item}}"></a>
-        </figure><span>{{= item.title}}</span>
-      </div>	{{ 
-      		});
-      	}}
+          <div class="helper_center"></div><img src="{{= src}}">
+        </figure>	{{
+        		}else{
+        	}}<span>{{= title}}</span>	{{
+        		}
+        	}}
+      </div>
     </script>
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/yosonjs/build/yoson-min.js"></script>
-    <script src="bower_components/html5shiv/dist/html5shiv.min.js"></script>
-    <script src="bower_components/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="js/libs/jquery/dist/jquery.min.js"></script>
+    <script src="js/libs/yosonjs/build/yoson-min.js"></script>
+    <script src="js/libs/html5shiv/dist/html5shiv.min.js"></script>
+    <script src="js/libs/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="js/modules.js"></script>
     <script src="js/schema.js"></script>
     <script src="js/loader.js"></script>

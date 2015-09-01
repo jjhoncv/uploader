@@ -6,3 +6,20 @@
   line-height: 20px;
   font-size: 22px;
 }
+#preview_files figure {
+  text-align: center;
+}
+#preview_files .item {
+  width: 150px;
+  height: 150px;
+  float: left;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+}
+#preview_files .item .helper_center {
+  display: inline-block;
+}
+#preview_files .item img {
+  max-height: 120px;
+  max-width: 130px;
+}

@@ -5,9 +5,9 @@ html(lang=es)
 		title Skeletor
 		meta(name="description",content="Skeletor")
 		meta(name="viewport",content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
-		link(rel="stylesheet",href="bower_components/normalize-css/normalize.css")
-		link(rel="stylesheet",href="bower_components/bootstrap/dist/css/bootstrap.min.css")
-		link(rel="stylesheet",href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css")
+		link(rel="stylesheet",href="js/libs/normalize-css/normalize.css")
+		link(rel="stylesheet",href="js/libs/bootstrap/dist/css/bootstrap.min.css")
+		link(rel="stylesheet",href="js/libs/bootstrap/dist/css/bootstrap-theme.min.css")
 		link(rel="stylesheet",href="css/style.css")
 		script.
 			var yOSON = {
@@ -24,26 +24,30 @@ html(lang=es)
 					input#images.form-control(name='images[]', type='file', placeholder='Ingrese su nombre', multiple, accept="image/*")
 				div#preview_files
 
-				input.btn.btn-default(type='submit', value='Enviar')
+				input.btn.btn-default.submit(type='submit', value='Enviar')
 
-		script(type="text/template" id="tplItemSlider")
-			|	{{
-			|		_.each(data.images, function(item){
-			|	}}
+		script(type="text/template" id="previewFiles")
+			.item				
+				|	{{
+				|		if(src){
+				|	}}
+				span {{= title}}
 				figure
 					.helper_center
-					a(href!="{{= url}}")
-						img(src!="{{= data.baseImage}}/{{= item}}")
-				span {{= item.title}}
-			|	{{
-			|		});
-			|	}}
+					img(src!="{{= src}}")
+				|	{{
+				|		}else{
+				|	}}
+				span {{= title}}
+				|	{{
+				|		}
+				|	}}
 
-		script(src="bower_components/jquery/dist/jquery.min.js")
-		script(src="bower_components/yosonjs/build/yoson-min.js")
+		script(src="js/libs/jquery/dist/jquery.min.js")
+		script(src="js/libs/yosonjs/build/yoson-min.js")
 
-		script(src="bower_components/html5shiv/dist/html5shiv.min.js")
-		script(src="bower_components/jquery-validation/dist/jquery.validate.min.js")
+		script(src="js/libs/html5shiv/dist/html5shiv.min.js")
+		script(src="js/libs/jquery-validation/dist/jquery.validate.min.js")
 		script(src="js/modules.js")
 		script(src="js/schema.js")
 		script(src="js/loader.js")
