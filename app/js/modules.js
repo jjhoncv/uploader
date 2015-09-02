@@ -50,30 +50,16 @@ yOSON.AppCore.addModule("files", function(Sb) {
     add: function(file) {
       files.push(file);
     },
-    getAll: function(callbackDeal) {
+    get: function(callbackDeal) {
       callbackDeal.call(this, files);
     },
     del: function(key) {
-      var total;
-      total = files.length;
-      files.splice(key, total);
-
-      /*i = 0
-      			while i < total
-      				file = files[i]
-      				if file.key == key
-      					slice(i, total)
-      					return
-      				i++
-       */
-      console.log("key", key);
-      console.log("total", total);
-      console.log("files", files);
+      files.splice(key, 1);
     }
   };
   initialize = function() {
     Sb.events(['files:add'], fn.add, this);
-    Sb.events(['files:getAll'], fn.getAll, this);
+    Sb.events(['files:get'], fn.get, this);
     Sb.events(['files:del'], fn.del, this);
   };
   return {
@@ -148,7 +134,6 @@ yOSON.AppCore.addModule("preview_images", function(Sb) {
   };
   suscribeEvents = function() {
     dom.input.on("change", events.selectedFiles);
-    dom.btnCancel.on("click", events.cancelFile);
   };
   events = {
     selectedFiles: function(e) {
@@ -156,12 +141,10 @@ yOSON.AppCore.addModule("preview_images", function(Sb) {
     },
     cancelFile: function(e) {
       var ele, key;
-      console.log("cancelFile");
       ele = $(e.target).parents(st.item);
       key = ele.index();
       ele.remove();
       Sb.trigger("files:del", key);
-      e.preventDefault();
     }
   };
   fn = {
@@ -179,13 +162,14 @@ yOSON.AppCore.addModule("preview_images", function(Sb) {
       Sb.trigger("files:add", file);
     },
     getMergeData: function(html) {
-      var item;
-      dom.preview.append(html);
-      item = dom.preview.find(st.item);
-      $("<span></span>", {
+      var span;
+      span = $("<span></span>", {
+        text: "cancel",
         "class": "cancel",
         click: events.cancelFile
-      }).appendTo(item);
+      });
+      html = $(html).append(span);
+      dom.preview.append(html);
     }
   };
   initialize = function(opts) {

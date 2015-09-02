@@ -51,29 +51,17 @@ yOSON.AppCore.addModule "files", (Sb) ->
 			files.push(file)
 			return
 
-		getAll : (callbackDeal)->
+		get : (callbackDeal)->
 			callbackDeal.call(this, files)
 			return
 
-		del : (key)->
-			total = files.length
-			files.splice(key, total)
-			###i = 0
-			while i < total
-				file = files[i]
-				if file.key == key
-					slice(i, total)
-					return
-				i++###
-			console.log("key", key)
-			console.log("total", total)
-			console.log("files", files)
-
+		del : (key)->			
+			files.splice(key, 1)
 			return
 	}
 	initialize = ->
 		Sb.events(['files:add'], fn.add, this)
-		Sb.events(['files:getAll'], fn.getAll, this)
+		Sb.events(['files:get'], fn.get, this)
 		Sb.events(['files:del'], fn.del, this)
 		return
 
@@ -150,8 +138,7 @@ yOSON.AppCore.addModule "preview_images", (Sb) ->
 		return	
 
 	suscribeEvents = () ->
-		dom.input.on "change", events.selectedFiles
-		dom.btnCancel.on "click", events.cancelFile
+		dom.input.on "change", events.selectedFiles		
 		return
 
 	events = {
@@ -159,13 +146,11 @@ yOSON.AppCore.addModule "preview_images", (Sb) ->
 			fn.prepare_data(e.target.files)
 			return
 
-		cancelFile : (e)->
-			console.log("cancelFile")
+		cancelFile : (e)->			
 			ele = $(e.target).parents(st.item)
 			key = ele.index()
 			ele.remove()
-			Sb.trigger("files:del", key)
-			e.preventDefault()
+			Sb.trigger("files:del", key)			
 			return	
 	}
 	fn = {
@@ -183,13 +168,16 @@ yOSON.AppCore.addModule "preview_images", (Sb) ->
 			return
 
 		getMergeData : (html)->
-			dom.preview.append(html)
-			item = dom.preview.find(st.item)
 			
-			$("<span></span>", 
+			span = $("<span></span>", 				
+				text  : "cancel"
 				class : "cancel"
 				click : events.cancelFile
-			).appendTo(item)
+			)
+
+			html = $(html).append(span)
+
+			dom.preview.append(html)
 			
 			return
 	}
