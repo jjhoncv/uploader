@@ -1,16 +1,18 @@
 yOSON.AppCore.addModule "files", (Sb) ->
 
   defaults = {
-    url   : 'http://'
     files : []
     async : true
     index : 0
+    tpl   : "#file"
   }
 
   st = {}
   dom = {}
-
   
+  catchDom = ->
+    dom.tpl = $(st.tpl)
+    return
 
   fn =
     add: (files) ->
@@ -20,6 +22,7 @@ yOSON.AppCore.addModule "files", (Sb) ->
 
     set: (files) ->
       st.files = files
+      fn.list(fn.addTpl)
       return
 
     make: ->
@@ -47,6 +50,7 @@ yOSON.AppCore.addModule "files", (Sb) ->
       return
 
     unique: (file, callback) ->
+      file["html"] = dom.tpl
       if typeof callback == 'function'
         Sb.trigger('reader:add', file, callback)
       else
@@ -57,12 +61,18 @@ yOSON.AppCore.addModule "files", (Sb) ->
       $.each(st.files, callback)
       return
 
+    addTpl: (i, file)->
+      file["html"] = dom.tpl
+      st.files[i] = file
+      return 
+    
     preview: (i, file) ->
       Sb.trigger('render:add', file)
       return
 
   initialize = (opts) ->
     st = $.extends(defaults, opts, {})
+    catchDom()
     Sb.events(['files:add'], fn.add, this)
     return
 

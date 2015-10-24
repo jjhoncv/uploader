@@ -1,9 +1,8 @@
 yOSON.AppCore.addModule "reader", (Sb) ->  
   
   defaults = {
-    content   : '.section'
-    inputFile : '.my_file'
-    files: []
+    url   : 'http://'
+    files : []
   }
 
   st = {}
@@ -19,39 +18,11 @@ yOSON.AppCore.addModule "reader", (Sb) ->
     return
 
   events = 
-    onChange: (e) ->
-      st.files = fn.getFilesCurrent(e)
-      if fn.isFilesToUpload()
-        fn.initUpload()
-      return
 
   fn =
-    initUpload: ->
-      Sb.trigger('validate:validFiles')
-      Sb.trigger('validate:getFiles', fn.filesToUpload)
+    add: (file, callback)->
+      
       return
-
-    filesToUpload: (files) ->
-      Sb.trigger('files:add', files)
-      return
-
-    sharedFiles: (callback) ->
-      callback.call(st.files, this)
-      return
-
-    getFilesCurrent: (e) ->
-      files  = []
-      target = e.target
-
-      if target.files
-        files = target.files
-      else
-        files.push target.value
-      files
-
-    isFilesToUpload: ->
-      total = st.files.length
-      if total > 0 then true else false
 
   initialize = (opts) ->
     st = $.extends(defaults, opts, {})
