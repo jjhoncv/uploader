@@ -1,4 +1,4 @@
-yOSON.AppCore.addModule "main", (Sb) ->  
+yOSON.AppCore.addModule "reader", (Sb) ->  
   
   defaults = {
     content   : '.section'

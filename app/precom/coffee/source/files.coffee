@@ -3,24 +3,26 @@ yOSON.AppCore.addModule "files", (Sb) ->
   defaults = {
     url   : 'http://'
     files : []
-    upload: async: true
+    async : true
     index : 0
   }
 
   st = {}
   dom = {}
 
+  
+
   fn =
     add: (files) ->
       fn.set(files)
-      fn.upload(st.upload)
+      fn.make()
       return
 
     set: (files) ->
       st.files = files
       return
 
-    upload: (st) ->
+    make: ->
       type = 'sync'
       type = if st.async then 'a' + type else ''
       fn.list(fn.preview)
@@ -28,7 +30,7 @@ yOSON.AppCore.addModule "files", (Sb) ->
       return
 
     async: ->
-      fn.list (i, file) ->
+      fn.list(i, file) ->
         fn.unique(file)
         return
       return
@@ -46,9 +48,9 @@ yOSON.AppCore.addModule "files", (Sb) ->
 
     unique: (file, callback) ->
       if typeof callback == 'function'
-        Sb.trigger('upload:add', file, callback)
+        Sb.trigger('reader:add', file, callback)
       else
-        Sb.trigger('upload:add', file)
+        Sb.trigger('reader:add', file)
       return
 
     list: (callback) ->
@@ -56,7 +58,7 @@ yOSON.AppCore.addModule "files", (Sb) ->
       return
 
     preview: (i, file) ->
-      Sb.trigger('preview:add', file)
+      Sb.trigger('render:add', file)
       return
 
   initialize = (opts) ->
