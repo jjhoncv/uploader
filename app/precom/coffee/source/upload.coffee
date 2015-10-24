@@ -1,9 +1,8 @@
-yOSON.AppCore.addModule "reader", (Sb) ->  
+yOSON.AppCore.addModule "upload", (Sb) ->  
   
   defaults = {
-    content   : '.section'
-    inputFile : '.my_file'
-    files: []
+    url   : 'http://'
+    files : []
   }
 
   st = {}
@@ -19,39 +18,33 @@ yOSON.AppCore.addModule "reader", (Sb) ->
     return
 
   events = 
-    onChange: (e) ->
-      st.files = fn.getFilesCurrent(e)
-      if fn.isFilesToUpload()
-        fn.initUpload()
-      return
 
   fn =
-    initUpload: ->
-      Sb.trigger('validate:validFiles')
-      Sb.trigger('validate:getFiles', fn.filesToUpload)
+    add: (file, callback)->
+      data = fn.getFileToUpload(file)
+      fn.ajax(data, file, callback)      
       return
 
-    filesToUpload: (files) ->
-      Sb.trigger('files:add', files)
+    getFileToUpload: (file)->
+      formData = new formData()
+      formData.append("file", file)
+      return formData
+
+    ajax: (data, file, callback)->
+      ajax = new XMLHttpRequest()
+      ajax.open("POST", st.url)
+      ajax.onload = ->
+        fn.successAjax(ajax, file, callback)        
+        return
+      ajax.send(data)
       return
 
-    sharedFiles: (callback) ->
-      callback.call(st.files, this)
+    successAjax : (ajax, file, callback)->
+      if typeof callback == 'function'
+          callback()
+      if ajax.status is 200 and ajax.responseText.status is true
+
       return
-
-    getFilesCurrent: (e) ->
-      files  = []
-      target = e.target
-
-      if target.files
-        files = target.files
-      else
-        files.push target.value
-      files
-
-    isFilesToUpload: ->
-      total = st.files.length
-      if total > 0 then true else false
 
   initialize = (opts) ->
     st = $.extends(defaults, opts, {})

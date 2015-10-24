@@ -26,32 +26,26 @@ yOSON.AppCore.addModule "reader", (Sb) ->
       return
 
   fn =
-    initUpload: ->
-      Sb.trigger('validate:validFiles')
-      Sb.trigger('validate:getFiles', fn.filesToUpload)
+    add: (file, callback)->
+      if fn.isSupportFileReader()
+        fn.readFile(file, callback)
       return
 
-    filesToUpload: (files) ->
-      Sb.trigger('files:add', files)
+    readFile: (file, callback)->
+      reader = new FileReader()
+      
+      reader.onload = ((theFile) ->
+        (e) ->
+          file["src"] = e.target.result
+          return
+      )(file)
       return
 
-    sharedFiles: (callback) ->
-      callback.call(st.files, this)
-      return
-
-    getFilesCurrent: (e) ->
-      files  = []
-      target = e.target
-
-      if target.files
-        files = target.files
-      else
-        files.push target.value
-      files
-
-    isFilesToUpload: ->
-      total = st.files.length
-      if total > 0 then true else false
+    isSupportFileReader: ()->
+      status = false
+      if window.FileReader
+        status = true
+      status
 
   initialize = (opts) ->
     st = $.extends(defaults, opts, {})

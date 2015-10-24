@@ -52,9 +52,9 @@ yOSON.AppCore.addModule "files", (Sb) ->
     unique: (file, callback) ->
       file["html"] = dom.tpl
       if typeof callback == 'function'
-        Sb.trigger('reader:add', file, callback)
+        Sb.trigger('upload:add', file, callback)
       else
-        Sb.trigger('reader:add', file)
+        Sb.trigger('upload:add', file)
       return
 
     list: (callback) ->
